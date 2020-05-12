@@ -5,6 +5,7 @@ import Skeleton from '../skeleton/Skeleton';
 import TopBar from '../top-bar/TopBar';
 import MoneyControl from '../money-control/MoneyControl';
 import MoneyChart from '../money-chart/MoneyChart';
+import FeedDisplay from '../feed-display/FeedDisplay';
 
 function App() {
   const [moneyFeed, setMoneyFeed] = useState([]);
@@ -34,14 +35,12 @@ function App() {
       <MoneyControl
         addToFeed={addToMoneyFeed}
       />
-      <ul>
-        {moneyFeed.map((feedItem) => {
-          return <li>{feedItem.amount}</li>;
-        })}
-      </ul>
       <MoneyChart
         moneyFeed={moneyFeed}
         feedByInterval={feedByInterval}
+      />
+      <FeedDisplay
+        moneyFeed={moneyFeed}
       />
     </Skeleton>
   );
