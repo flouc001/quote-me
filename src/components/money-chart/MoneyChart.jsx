@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Highcharts from 'highcharts/highstock';
 import HighChartsReact from 'highcharts-react-official';
 import styled from 'styled-components';
 import { DateTime } from 'luxon';
-import { CATEGORY } from '../../utils/constants';
+import { CATEGORY, FREQUENCY } from '../../utils/constants';
 
 const ChartContainer = styled.div`
   padding: 1rem;
@@ -11,11 +12,17 @@ const ChartContainer = styled.div`
 
 const MoneyChart = ({ feedByInterval, className }) => {
   const totalSeries = [];
+  const savingSeries = [];
 
   const series = [
     {
       label: 'Total',
       data: totalSeries,
+    },
+
+    {
+      label: 'Saving',
+      data: savingSeries,
     },
   ];
 
@@ -27,6 +34,7 @@ const MoneyChart = ({ feedByInterval, className }) => {
   // simulate the year
   // assume not a leap year for now
   let total = 0;
+  let saving = 0;
 
   function adjustTotal(feedItem) {
     const { amount, category } = feedItem;
@@ -38,6 +46,10 @@ const MoneyChart = ({ feedByInterval, className }) => {
       case CATEGORY.EXPENSE:
         total -= amount;
         break;
+      case CATEGORY.SAVING:
+        total -= amount;
+        saving += amount;
+        break;
       default:
         break;
     }
@@ -46,21 +58,22 @@ const MoneyChart = ({ feedByInterval, className }) => {
   for (let x = 1; x < 365; x += 1) {
     const moneyDate = DateTime.fromObject({ year: 2020, ordinal: x });
 
-    feedByInterval.d.forEach(adjustTotal);
+    feedByInterval.get(FREQUENCY.DAILY).forEach(adjustTotal);
 
     if (moneyDate.day === 1) {
-      feedByInterval.m.forEach(adjustTotal);
+      feedByInterval.get(FREQUENCY.MONTHLY).forEach(adjustTotal);
     }
 
     if (moneyDate.weekday === 1) {
-      feedByInterval.w.forEach(adjustTotal);
+      feedByInterval.get(FREQUENCY.WEEKLY).forEach(adjustTotal);
     }
 
     if (moneyDate.weekday < 6) {
-      feedByInterval.wd.forEach(adjustTotal);
+      feedByInterval.get(FREQUENCY.WEEKDAY).forEach(adjustTotal);
     }
 
     totalSeries.push([moneyDate.toISO(), total]);
+    savingSeries.push([moneyDate.toISO(), saving]);
   }
 
   return (
@@ -73,6 +86,15 @@ const MoneyChart = ({ feedByInterval, className }) => {
       />
     </ChartContainer>
   );
+};
+
+MoneyChart.propTypes = {
+  className: PropTypes.string,
+  feedByInterval: PropTypes.instanceOf(Map).isRequired,
+};
+
+MoneyChart.defaultProps = {
+  className: '',
 };
 
 export default MoneyChart;

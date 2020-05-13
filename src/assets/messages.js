@@ -10,6 +10,7 @@ export default {
 
     'category.income': 'Income',
     'category.expense': 'Expense',
+    'category.saving': 'Saving',
 
     'moneyControl.add': 'Add!',
   },

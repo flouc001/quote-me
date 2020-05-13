@@ -9,4 +9,5 @@ export const FREQUENCY = {
 export const CATEGORY = {
   INCOME: 0,
   EXPENSE: 1,
+  SAVING: 2,
 };

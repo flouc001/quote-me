@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FormattedNumber } from 'react-intl';
 
+import { FeedItemType } from '../../utils/proptypes';
 import { CATEGORY } from '../../utils/constants';
 
 const StyledFeedContainer = styled.ul`
@@ -36,5 +38,9 @@ const FeedDisplay = ({ moneyFeed }) => (
     {moneyFeed.map(createFeedItem)}
   </StyledFeedContainer>
 );
+
+FeedDisplay.propTypes = {
+  moneyFeed: PropTypes.arrayOf(FeedItemType).isRequired,
+};
 
 export default FeedDisplay;

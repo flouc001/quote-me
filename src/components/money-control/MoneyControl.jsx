@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 
@@ -46,6 +47,7 @@ const MoneyControl = ({ className, addToFeed }) => {
       >
         <FormattedMessage id="category.income">{buildOption(CATEGORY.INCOME)}</FormattedMessage>
         <FormattedMessage id="category.expense">{buildOption(CATEGORY.EXPENSE)}</FormattedMessage>
+        <FormattedMessage id="category.saving">{buildOption(CATEGORY.SAVING)}</FormattedMessage>
       </select>
 
       <input
@@ -74,11 +76,17 @@ const MoneyControl = ({ className, addToFeed }) => {
   );
 };
 
+MoneyControl.propTypes = {
+  className: PropTypes.string.isRequired,
+  addToFeed: PropTypes.func.isRequired,
+};
+
 const StyledMoneyControl = styled(MoneyControl)`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 `;
+
 
 export default StyledMoneyControl;

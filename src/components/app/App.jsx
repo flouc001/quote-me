@@ -7,6 +7,7 @@ import MoneyChart from '../money-chart/MoneyChart';
 import MoneyControl from '../money-control/MoneyControl';
 import Skeleton from '../skeleton/Skeleton';
 import TopBar from '../top-bar/TopBar';
+import { FREQUENCY } from '../../utils/constants';
 
 const SplitPaneContainer = styled.div`
   display: flex;
@@ -21,19 +22,20 @@ const SplitPane = styled.div`
 
 function App() {
   const [moneyFeed, setMoneyFeed] = useState([]);
-  const [feedByInterval, setFeedByInterval] = useState({
-    d: [],
-    w: [],
-    m: [],
-    y: [],
-    wd: [],
-  });
+
+  const [feedByInterval, setFeedByInterval] = useState(new Map([
+    [FREQUENCY.DAILY, []],
+    [FREQUENCY.WEEKLY, []],
+    [FREQUENCY.MONTHLY, []],
+    [FREQUENCY.YEARLY, []],
+    [FREQUENCY.WEEKDAY, []],
+  ]));
 
   function addToMoneyFeed(feedItem) {
     const newFeed = [...moneyFeed, feedItem];
 
-    const newFeedByInterval = { ...feedByInterval };
-    newFeedByInterval[feedItem.interval].push(feedItem);
+    const newFeedByInterval = new Map(feedByInterval);
+    newFeedByInterval.get(feedItem.interval).push(feedItem);
 
     setMoneyFeed(newFeed);
     setFeedByInterval(newFeedByInterval);
