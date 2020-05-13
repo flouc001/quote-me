@@ -55,8 +55,8 @@ const MoneyChart = ({ feedByInterval, className }) => {
     }
   }
 
-  for (let x = 1; x < 365; x += 1) {
-    const moneyDate = DateTime.fromObject({ year: 2020, ordinal: x });
+  for (let ordinal = 1; ordinal < 365; ordinal += 1) {
+    const moneyDate = DateTime.fromObject({ year: 2020, ordinal });
 
     feedByInterval.get(FREQUENCY.DAILY).forEach(adjustTotal);
 
@@ -72,8 +72,8 @@ const MoneyChart = ({ feedByInterval, className }) => {
       feedByInterval.get(FREQUENCY.WEEKDAY).forEach(adjustTotal);
     }
 
-    totalSeries.push([moneyDate.toISO(), total]);
-    savingSeries.push([moneyDate.toISO(), saving]);
+    totalSeries.push([moneyDate.toISODate(), total]);
+    savingSeries.push([moneyDate.toISODate(), saving]);
   }
 
   return (
