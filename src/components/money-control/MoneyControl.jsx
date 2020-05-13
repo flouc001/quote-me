@@ -1,33 +1,57 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 
-const passOptionValue = (value) => value === 'true';
+import { FREQUENCY, CATEGORY } from '../../utils/constants';
 
 const MoneyControl = ({ className, addToFeed }) => {
-  const [amount, setAmount] = useState(0);
-  const [isIncome, setIsIncome] = useState(true);
+  const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState(CATEGORY.INCOME);
   const [interval, setInterval] = useState('d');
 
-  function handleSubmit() {
-    addToFeed({ amount, isIncome, interval });
+  function handleSubmit(e) {
+    e.preventDefault();
 
-    setAmount(0);
+    if (amount !== '') {
+      addToFeed({ amount, category, interval });
+
+      setAmount('');
+    }
   }
 
+  function updateAmount(e) {
+    const parsedValue = parseFloat(e.target.value);
+
+    if (Number.isNaN(parsedValue)) {
+      setAmount('');
+      return;
+    }
+
+    setAmount(parsedValue);
+  }
+
+  function updateCategory(e) {
+    const parsedFlag = Number.parseInt(e.target.value, 10);
+
+    setCategory(parsedFlag);
+  }
+
+  const buildOption = (value) => (message) => <option value={value}>{message}</option>;
+
   return (
-    <div className={className}>
+    <form onSubmit={handleSubmit} className={className}>
       <select
-        onChange={(event) => setIsIncome(passOptionValue(event.target.value))}
-        value={isIncome}
+        onChange={updateCategory}
+        value={category}
       >
-        <option value>Income</option>
-        <option value={false}>Expense</option>
+        <FormattedMessage id="category.income">{buildOption(CATEGORY.INCOME)}</FormattedMessage>
+        <FormattedMessage id="category.expense">{buildOption(CATEGORY.EXPENSE)}</FormattedMessage>
       </select>
 
       <input
-        onChange={(event) => setAmount(+event.target.value)}
-        type="number"
+        onChange={updateAmount}
         value={amount}
+        type="number"
       />
 
       <p>Every</p>
@@ -36,20 +60,17 @@ const MoneyControl = ({ className, addToFeed }) => {
         onChange={(event) => setInterval(event.target.value)}
         value={interval}
       >
-        <option value="d">Day</option>
-        <option value="w">Week</option>
-        <option value="wd">Weekday</option>
-        <option value="m">Month</option>
-        <option value="y">Year</option>
+        <FormattedMessage id="frequency.day">{buildOption(FREQUENCY.DAILY)}</FormattedMessage>
+        <FormattedMessage id="frequency.week">{buildOption(FREQUENCY.WEEKLY)}</FormattedMessage>
+        <FormattedMessage id="frequency.weekday">{buildOption(FREQUENCY.WEEKDAY)}</FormattedMessage>
+        <FormattedMessage id="frequency.month">{buildOption(FREQUENCY.MONTHLY)}</FormattedMessage>
+        <FormattedMessage id="frequency.year">{buildOption(FREQUENCY.YEARLY)}</FormattedMessage>
       </select>
 
-      <button
-        type="button"
-        onClick={handleSubmit}
-      >
-        Add!
+      <button type="submit">
+        <FormattedMessage id="moneyControl.add" />
       </button>
-    </div>
+    </form>
   );
 };
 

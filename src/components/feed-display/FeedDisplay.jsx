@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FormattedNumber } from 'react-intl';
+
+import { CATEGORY } from '../../utils/constants';
 
 const StyledFeedContainer = styled.ul`
   padding: 1rem;
@@ -10,14 +13,21 @@ const StyledFeedItem = styled.li`
   border-radius: .4em;
   max-width: 10rem;
   padding: 1rem;
-  background-color: ${(props) => (props.isIncome ? props.theme.colors.brand : props.theme.colors.red)};
+  /* TODO: proper category colors */
+  background-color: ${(props) => (props.category === CATEGORY.INCOME ? props.theme.colors.brand : props.theme.colors.red)};
   color: ${(props) => props.theme.colors.white};
-  ${(props) => (!props.isIncome && 'margin-left: auto;')};
+  margin-top: 0.5rem;
 `;
 
-const createFeedItem = (feedItem) => (
-  <StyledFeedItem isIncome={feedItem.isIncome}>
-    {feedItem.amount}
+const createFeedItem = (feedItem, index) => (
+  <StyledFeedItem category={feedItem.category} key={index}>
+    <FormattedNumber
+      value={feedItem.amount}
+      // eslint-disable-next-line react/style-prop-object
+      style="currency"
+      // Hard coded to GBP but can be changed
+      currency="GBP"
+    />
   </StyledFeedItem>
 );
 

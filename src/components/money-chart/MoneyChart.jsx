@@ -1,10 +1,15 @@
 import React from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighChartsReact from 'highcharts-react-official';
+import styled from 'styled-components';
 import { DateTime } from 'luxon';
+import { CATEGORY } from '../../utils/constants';
 
-const MoneyChart = ({ moneyFeed, feedByInterval }) => {
-  const dailySeries = [];
+const ChartContainer = styled.div`
+  padding: 1rem;
+`;
+
+const MoneyChart = ({ feedByInterval, className }) => {
   const totalSeries = [];
 
   const series = [
@@ -24,12 +29,17 @@ const MoneyChart = ({ moneyFeed, feedByInterval }) => {
   let total = 0;
 
   function adjustTotal(feedItem) {
-    const { amount, isIncome } = feedItem;
+    const { amount, category } = feedItem;
 
-    if (isIncome) {
-      total += amount;
-    } else {
-      total -= amount;
+    switch (category) {
+      case CATEGORY.INCOME:
+        total += amount;
+        break;
+      case CATEGORY.EXPENSE:
+        total -= amount;
+        break;
+      default:
+        break;
     }
   }
 
@@ -54,11 +64,14 @@ const MoneyChart = ({ moneyFeed, feedByInterval }) => {
   }
 
   return (
-    <HighChartsReact
-      highcharts={Highcharts}
-      constructorType="stockChart"
-      options={options}
-    />
+    <ChartContainer>
+      <HighChartsReact
+        highcharts={Highcharts}
+        constructorType="stockChart"
+        options={options}
+        className={className}
+      />
+    </ChartContainer>
   );
 };
 

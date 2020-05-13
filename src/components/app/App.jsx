@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import styled from 'styled-components';
 
+import FeedDisplay from '../feed-display/FeedDisplay';
+import MoneyChart from '../money-chart/MoneyChart';
+import MoneyControl from '../money-control/MoneyControl';
 import Skeleton from '../skeleton/Skeleton';
 import TopBar from '../top-bar/TopBar';
-import MoneyControl from '../money-control/MoneyControl';
-import MoneyChart from '../money-chart/MoneyChart';
-import FeedDisplay from '../feed-display/FeedDisplay';
+
+const SplitPaneContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const SplitPane = styled.div`
+  display: flex;
+  flex: 1 1 100%;
+  padding: 1rem;
+`;
 
 function App() {
   const [moneyFeed, setMoneyFeed] = useState([]);
@@ -39,9 +51,16 @@ function App() {
         moneyFeed={moneyFeed}
         feedByInterval={feedByInterval}
       />
-      <FeedDisplay
-        moneyFeed={moneyFeed}
-      />
+      <SplitPaneContainer>
+        <SplitPane>
+          <FeedDisplay
+            moneyFeed={moneyFeed}
+          />
+        </SplitPane>
+        <SplitPane>
+          <h1>Hello World!</h1>
+        </SplitPane>
+      </SplitPaneContainer>
     </Skeleton>
   );
 }
