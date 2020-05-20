@@ -7,8 +7,6 @@ import rootReducer from './reducers';
 const persistConfig = {
   key: 'root',
   storage,
-  debug: true,
-  whitelist: ['feed'],
 };
 
 const createStoreWithMiddleware = applyMiddleware(logger)(createStore);
