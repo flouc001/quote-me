@@ -1,3 +1,5 @@
+import { CATEGORY } from '../utils/constants';
+
 export default {
   'en-GB': {
     'topbar.title': 'Quote Me',
@@ -7,6 +9,12 @@ export default {
     'frequency.month': 'Month',
     'frequency.year': 'Year',
     'frequency.weekday': 'Weekday',
+
+    'category.heading': `{category, select,
+      ${CATEGORY.INCOME} {Income}
+      ${CATEGORY.EXPENSE} {Expense}
+      ${CATEGORY.SAVING} {Saving}
+    }`,
 
     'category.income': 'Income',
     'category.expense': 'Expense',

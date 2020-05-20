@@ -1,69 +1,53 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import styled from 'styled-components';
 
-import FeedDisplay from '../feed-display/FeedDisplay';
-import MoneyChart from '../money-chart/MoneyChart';
-import MoneyControl from '../money-control/MoneyControl';
-import Skeleton from '../skeleton/Skeleton';
-import TopBar from '../top-bar/TopBar';
-import { FREQUENCY } from '../../utils/constants';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Navbar from 'react-bootstrap/Navbar';
 
-const SplitPaneContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const SplitPane = styled.div`
-  display: flex;
-  flex: 1 1 100%;
-  padding: 1rem;
-`;
+import Panel from '../panel/Panel';
+import FeedDisplay from '../feed-display/FeedDisplayContainer';
+import MoneyChart from '../money-chart/MoneyChartContainer';
+import MoneyControl from '../money-control/MoneyControlContainer';
 
 function App() {
-  const [moneyFeed, setMoneyFeed] = useState([]);
-
-  const [feedByInterval, setFeedByInterval] = useState(new Map([
-    [FREQUENCY.DAILY, []],
-    [FREQUENCY.WEEKLY, []],
-    [FREQUENCY.MONTHLY, []],
-    [FREQUENCY.YEARLY, []],
-    [FREQUENCY.WEEKDAY, []],
-  ]));
-
-  function addToMoneyFeed(feedItem) {
-    const newFeed = [...moneyFeed, feedItem];
-
-    const newFeedByInterval = new Map(feedByInterval);
-    newFeedByInterval.get(feedItem.interval).push(feedItem);
-
-    setMoneyFeed(newFeed);
-    setFeedByInterval(newFeedByInterval);
-  }
-
   return (
-    <Skeleton>
-      <TopBar>
-        <span><FormattedMessage id="topbar.title" /></span>
-      </TopBar>
-      <MoneyControl
-        addToFeed={addToMoneyFeed}
-      />
-      <MoneyChart
-        moneyFeed={moneyFeed}
-        feedByInterval={feedByInterval}
-      />
-      <SplitPaneContainer>
-        <SplitPane>
-          <FeedDisplay
-            moneyFeed={moneyFeed}
-          />
-        </SplitPane>
-        <SplitPane>
-          <h1>Hello World!</h1>
-        </SplitPane>
-      </SplitPaneContainer>
-    </Skeleton>
+    <>
+      <Navbar
+        bg="dark"
+        variant="dark"
+      >
+        <Navbar.Brand>
+          <FormattedMessage id="topbar.title" />
+        </Navbar.Brand>
+      </Navbar>
+      <Container
+        fluid
+        className="p-3"
+      >
+        <Row className="mb-3">
+          <Col xs={12}>
+            <MoneyControl className="mr-auto ml-auto" />
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col xs={12}>
+            <Panel>
+              <MoneyChart />
+            </Panel>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} md={6}>
+            <FeedDisplay />
+          </Col>
+          <Col xs={12} md={6}>
+            <h3>Hello</h3>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 

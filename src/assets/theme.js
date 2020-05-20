@@ -4,8 +4,7 @@ const colors = {
   red: '#ed3023',
   white: '#fff',
   black: '#000',
-  grey: '#1a1a1a',
-  ivory: '#F0EAD6',
+  grey: '#f8f8fb',
 
   brand: '#327CCB',
 };
@@ -18,7 +17,7 @@ const theme = {
     color: colors.brand,
   },
 
-  backgroundColor: colors.white,
+  backgroundColor: colors.grey,
 };
 
 export default theme;

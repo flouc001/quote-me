@@ -2,15 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Highcharts from 'highcharts/highstock';
 import HighChartsReact from 'highcharts-react-official';
-import styled from 'styled-components';
 import { DateTime } from 'luxon';
 import { CATEGORY, FREQUENCY } from '../../utils/constants';
 
-const ChartContainer = styled.div`
-  padding: 1rem;
-`;
-
-const MoneyChart = ({ feedByInterval, className }) => {
+const MoneyChart = ({ feedItemByInterval, className }) => {
   const totalSeries = [];
   const savingSeries = [];
 
@@ -58,18 +53,20 @@ const MoneyChart = ({ feedByInterval, className }) => {
   for (let ordinal = 1; ordinal < 365; ordinal += 1) {
     const moneyDate = DateTime.fromObject({ year: 2020, ordinal });
 
-    feedByInterval.get(FREQUENCY.DAILY).forEach(adjustTotal);
-
-    if (moneyDate.day === 1) {
-      feedByInterval.get(FREQUENCY.MONTHLY).forEach(adjustTotal);
+    if (Array.isArray(feedItemByInterval[FREQUENCY.DAILY])) {
+      feedItemByInterval[FREQUENCY.DAILY].forEach(adjustTotal);
     }
 
-    if (moneyDate.weekday === 1) {
-      feedByInterval.get(FREQUENCY.WEEKLY).forEach(adjustTotal);
+    if (moneyDate.day === 1 && Array.isArray(feedItemByInterval[FREQUENCY.MONTHLY])) {
+      feedItemByInterval[FREQUENCY.MONTHLY].forEach(adjustTotal);
     }
 
-    if (moneyDate.weekday < 6) {
-      feedByInterval.get(FREQUENCY.WEEKDAY).forEach(adjustTotal);
+    if (moneyDate.weekday === 1 && Array.isArray(feedItemByInterval[FREQUENCY.WEEKLY])) {
+      feedItemByInterval[FREQUENCY.WEEKLY].forEach(adjustTotal);
+    }
+
+    if (moneyDate.weekday < 6 && Array.isArray(feedItemByInterval[FREQUENCY.WEEKDAY])) {
+      feedItemByInterval[FREQUENCY.WEEKDAY].forEach(adjustTotal);
     }
 
     totalSeries.push([moneyDate.toISODate(), total]);
@@ -77,20 +74,18 @@ const MoneyChart = ({ feedByInterval, className }) => {
   }
 
   return (
-    <ChartContainer>
-      <HighChartsReact
-        highcharts={Highcharts}
-        constructorType="stockChart"
-        options={options}
-        className={className}
-      />
-    </ChartContainer>
+    <HighChartsReact
+      highcharts={Highcharts}
+      constructorType="stockChart"
+      options={options}
+      className={className}
+    />
   );
 };
 
 MoneyChart.propTypes = {
   className: PropTypes.string,
-  feedByInterval: PropTypes.instanceOf(Map).isRequired,
+  feedItemByInterval: PropTypes.shape({}).isRequired,
 };
 
 MoneyChart.defaultProps = {

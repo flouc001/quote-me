@@ -5,6 +5,9 @@ import ReactDOM from 'react-dom';
 import WebFont from 'webfontloader';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { IntlProvider } from 'react-intl';
+import { Provider } from 'react-redux';
+
+import configureStore from './redux/store';
 
 import messages from './assets/messages';
 import theme from './assets/theme';
@@ -27,14 +30,18 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const store = configureStore();
+
 ReactDOM.render(
   // Hard coding the below but would support multiple locales.
-  <IntlProvider locale="en-GB" messages={messages['en-GB']}>
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <App />
-    </ThemeProvider>
-  </IntlProvider>,
+  <Provider store={store}>
+    <IntlProvider locale="en-GB" messages={messages['en-GB']}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <App />
+      </ThemeProvider>
+    </IntlProvider>
+  </Provider>,
   document.getElementById('root'),
 );
 
