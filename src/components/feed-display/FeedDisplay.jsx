@@ -19,7 +19,6 @@ const createFeedItem = (onClose) => (feedItem, index) => (
       </strong>
     </Toast.Header>
     <Toast.Body>
-      {feedItem.id}
       <FormattedNumber
         value={feedItem.amount}
         // eslint-disable-next-line react/style-prop-object

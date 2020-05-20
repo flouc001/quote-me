@@ -1,14 +1,27 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import logger from 'redux-logger';
-import reducers from './reducers';
+import rootReducer from './reducers';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  debug: true,
+  whitelist: ['feed'],
+};
 
 const createStoreWithMiddleware = applyMiddleware(logger)(createStore);
-const rootReducer = combineReducers(reducers);
-const configureStore = (initialState) => createStoreWithMiddleware(
-  rootReducer,
-  initialState,
-  // eslint-disable-next-line no-underscore-dangle
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+const configureStore = (initialState = {}) => {
+  const store = createStoreWithMiddleware(
+    persistedReducer,
+    initialState,
+    // eslint-disable-next-line no-underscore-dangle
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  );
+  const persistor = persistStore(store);
+  return { store, persistor };
+};
 
 export default configureStore;

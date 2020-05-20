@@ -46,7 +46,7 @@ export default function (state = initialState, action = {}) {
   switch (action.type) {
     case ADD: return addItemToState(state, action);
     case REMOVE: return removeItemFromState(state, action);
-    default: return { ...state };
+    default: return state;
   }
 }
 

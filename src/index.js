@@ -6,6 +6,7 @@ import WebFont from 'webfontloader';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import configureStore from './redux/store';
 
@@ -30,17 +31,19 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const store = configureStore();
+const { store, persistor } = configureStore();
 
 ReactDOM.render(
   // Hard coding the below but would support multiple locales.
   <Provider store={store}>
-    <IntlProvider locale="en-GB" messages={messages['en-GB']}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <App />
-      </ThemeProvider>
-    </IntlProvider>
+    <PersistGate loading={null} persistor={persistor}>
+      <IntlProvider locale="en-GB" messages={messages['en-GB']}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <App />
+        </ThemeProvider>
+      </IntlProvider>
+    </PersistGate>
   </Provider>,
   document.getElementById('root'),
 );
