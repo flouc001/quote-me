@@ -1,15 +1,19 @@
 [/] Switch to categories
-[] Add savings category
-[] Add delete feed item option
+[/] Add savings category
+[/] Add delete feed item option
 [/] Add proptypes library
+[] Style highcharts chart
 [] Add tests
-[] Add more interval options (weekend, fortnite?)
+[] Add expense line to graph
 [] Add savings goal
+[] Add pots
+[] Add table breakdown (spending money per month, savings per month)
+[] Add custom money shift rules (at the end of the month, save what's left)
+[] Add more interval options (weekend, fortnite?)
 [] Add suggestions to meet goal (save this much per day/month/year more if you...)
 [] Add theoreticals (temporary modifications to feed items)
 [] Style money control
 [] Think of more efficient way to calculate total
 [] Add tooltips to show change events
 [] Persist to local storage
-[] Style highcharts chart
 [] Add saving option (accounts, interest)
